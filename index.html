@@ -1,340 +1,531 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Correct Score — история коэффициентов</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Correct Score — Калькулятор</title>
 <style>
-:root{color-scheme:dark;--ink:#edf4ff;--muted:#91a6c4;--line:#243d61;--head:#102b4c;--green:#32d583;--red:#ff6474;--blue:#1688ff;--bg:#061426;--panel:#0b1e35;--panel2:#102844}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#174b7a 0,#091d34 42%,#050f1d 100%);color:var(--ink);font:14px Arial,Helvetica,sans-serif;min-height:100vh}main{max-width:1450px;margin:0 auto;padding:18px}h1{font-size:23px;margin:4px 0 6px;letter-spacing:.2px}.sub{color:#a9bdd7;margin:0 0 16px;line-height:1.5}.top{display:flex;gap:12px;align-items:end;flex-wrap:wrap;background:linear-gradient(135deg,#102b4b,#0a1c32);border:1px solid #28517c;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 8px 26px #0005}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;color:#a8bdd7}input,button,textarea{font:inherit}input{border:1px solid #315477;border-radius:7px;padding:10px;background:#07182b;color:#f2f7ff;min-width:0}textarea{border:1px solid #315477;border-radius:7px;padding:10px;background:#07182b;color:#f2f7ff;min-width:0;resize:vertical;font:12px monospace;width:100%}.match{width:min(360px,100%)}.btn{border:1px solid #315477;background:#102b49;color:#e5f1ff;border-radius:8px;padding:10px 13px;font-weight:700;cursor:pointer;transition:.15s}.btn:hover{background:#173b62;border-color:#4c83b8}.btn.primary{background:linear-gradient(135deg,#1688ff,#0758b8);color:white;border-color:#2997ff;box-shadow:0 4px 14px #087cff44}.btn.danger{color:#ff8792;border-color:#7c3543}.btn:active{transform:translateY(1px)}.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.stats{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:9px;margin-bottom:12px}.stat{background:linear-gradient(145deg,#102b49,#0a1c31);border:1px solid #25496e;border-radius:10px;padding:12px;box-shadow:0 5px 16px #0003}.stat small{display:block;color:#9eb4d0;font-size:11px}.stat b{display:block;font-size:19px;margin-top:5px}.tablebox{background:#081a2e;border:1px solid #2a4d72;border-radius:10px;overflow:auto;box-shadow:0 8px 24px #0004}table{border-collapse:collapse;min-width:1100px;width:100%;table-layout:fixed}thead th{background:#123456;font-size:12px;color:#d7e9ff;font-weight:700;padding:10px 4px;border:1px solid #2b5278;text-align:center}th.time{width:88px}th.update{width:112px}th.scorecol{width:76px}.timecell{background:#0d2743;text-align:center;color:#c2d5ec;font-size:12px;border:1px solid #254766;padding:6px 3px;vertical-align:middle}.updatecell{background:#0d2743;text-align:center;color:#a9c1dd;font-size:11px;border:1px solid #254766;padding:5px;vertical-align:middle}.scorelabel{text-align:center;color:#d0e3fa;font-size:11px;padding:5px 2px;border-left:1px solid #1e3d5d;border-right:1px solid #1e3d5d;height:25px;background:#0d223a}.oddscell{text-align:center;padding:2px;border-left:1px solid #1e3d5d;border-right:1px solid #1e3d5d;height:46px;background:#091b2f;display:flex;flex-direction:column;justify-content:center;align-items:center}.oddscell input{width:100%;text-align:center;padding:2px;border:1px solid transparent;border-radius:5px;font-size:13px;background:transparent;color:#eaf3ff}.oddscell input:focus{outline:2px solid #1688ff;background:#102b49;border-color:#1688ff}.oddscell input.down{color:var(--red);font-weight:800}.oddscell input.up{color:var(--green);font-weight:800}.oddscell input.same{color:#d7e6f8}.delta{display:block;font-size:10px;font-weight:bold;line-height:1;margin-top:2px;height:12px}.delta.down{color:var(--red)}.delta.up{color:var(--green)}.delta.same{color:transparent}.market-start td{border-top:1px solid #345878}.update-start td{border-top:2px solid #3c668d}.timestamp{width:100%;font-size:11px;text-align:center;border:0;background:transparent;padding:4px;color:#d4e5f8}.timestamp:focus{outline:1px solid #1688ff;background:#102b49}.rowtools{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:4px}.rowtools button{font-size:11px;padding:4px 7px}.legend{display:flex;gap:14px;align-items:center;color:#b5c8df;font-size:12px;margin:10px 2px;flex-wrap:wrap}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.dot.red{background:var(--red);box-shadow:0 0 8px #ff647488}.dot.green{background:var(--green);box-shadow:0 0 8px #32d58388}.note{font-size:12px;color:#91a6c4;line-height:1.55;margin:12px 2px}.empty{padding:28px;text-align:center;color:#9bb2ce}.mini{font-size:11px;color:#9bb2ce}
-.changes-panel{background:linear-gradient(145deg,#102b49,#0a1c31);border:1px solid #28517c;border-radius:10px;padding:12px;margin-bottom:12px;display:none;box-shadow:0 5px 16px #0003}.changes-panel h3{margin:0 0 10px;font-size:14px;color:#8fc5ff}.changes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px}.change-item{background:#0d2743;padding:6px 4px;border-radius:6px;text-align:center;border:1px solid #254766}.change-item .score{font-size:11px;color:#d0e3fa;margin-bottom:2px}
-.pdfbox{background:linear-gradient(145deg,#102b49,#0a1c31);border:1px solid #28517c;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 6px 20px #0003}.pdfbox h2{font-size:16px;margin:0 0 8px}.pdfbox p{color:#a9bdd7;font-size:12px;line-height:1.5;margin:6px 0 10px}.pdfactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pdfactions input{max-width:100%;flex:1;min-width:190px}.progress{height:7px;background:#07182b;border-radius:8px;overflow:hidden;margin:10px 0}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1688ff,#32d583);transition:width .2s}.preview{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}.snapcard{min-width:0;background:#081a2e;border:1px solid #315477;border-radius:10px;padding:10px}.snapcard h3{font-size:14px;margin:0 0 10px;color:#8fc5ff}.marketcard{margin:9px 0;padding:9px;background:#0d2743;border:1px solid #254766;border-radius:8px}.marketcard h4{margin:0 0 8px;font-size:12px;color:#b9d8fa}.oddsgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.oddsedit{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;gap:6px;min-width:0}.oddsedit label{font-size:12px;color:#b9cde5}.oddsedit input{width:100%;min-width:0;text-align:center;padding:8px 4px;font-size:14px}.oddsedit input.suspect{border-color:#e6a23c;color:#ffd27a}.warn{color:#ffd27a!important}
-@media(max-width:650px){main{padding:11px}h1{font-size:19px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.tools .btn{flex:1 1 44%;font-size:12px;padding:10px 8px}.match{width:100%}.top{padding:11px}.preview{grid-template-columns:1fr}.oddsgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+:root {
+  --bg: #061426;
+  --panel: #0b1e35;
+  --line: #1e3d5d;
+  --ink: #edf4ff;
+  --muted: #91a6c4;
+  --green: #32d583;
+  --red: #ff6474;
+  --blue: #1688ff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+main { padding: 12px; max-width: 1000px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 0 0 5px; }
+.sub { color: var(--muted); font-size: 12px; margin: 0 0 15px; }
+.top-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 15px; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.field label { font-size: 12px; color: var(--muted); }
+input, button, textarea { font: inherit; }
+input {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: #07182b;
+  color: var(--ink);
+  width: 100%;
+}
+input:focus, textarea:focus { outline: 2px solid var(--blue); }
+.btn {
+  border: 1px solid var(--line);
+  background: #102b49;
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+.btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn.danger { color: var(--red); border-color: #4a212d; }
+.btn:hover { opacity: 0.9; }
+.btn:active { transform: scale(0.98); }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+.tools .btn { flex: 1 1 40%; font-size: 13px; }
+
+/* Блок сводки изменений */
+.summary-box {
+  background: linear-gradient(145deg, #102b49, #0a1c31);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+  display: none;
+}
+.summary-box h3 { font-size: 14px; margin: 0 0 10px; color: #8fc5ff; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
+.summary-item { background: #0d2743; padding: 8px 4px; border-radius: 6px; text-align: center; border: 1px solid var(--line); }
+.summary-item .score { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+
+/* Таблица */
+.table-container {
+  background: #081a2e;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 15px;
+}
+table {
+  border-collapse: collapse;
+  min-width: 1000px;
+  table-layout: fixed;
+  width: 100%;
+}
+th, td {
+  border: 1px solid var(--line);
+  text-align: center;
+}
+thead th {
+  background: #123456;
+  padding: 8px 4px;
+  font-size: 12px;
+  color: #d7e9ff;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+th.score-col { width: 70px; }
+
+/* Прилипающая колонка времени */
+th.time-header, td.time-cell {
+  width: 90px;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: #0d2743;
+}
+th.time-header { z-index: 4; background: #123456; }
+td.time-cell {
+  font-size: 11px;
+  color: var(--muted);
+  vertical-align: top;
+  padding: 8px 4px;
+}
+.time-input {
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  font-size: 11px;
+  color: var(--ink);
+}
+
+/* Ячейка с коэффициентом */
+td.odds-cell {
+  padding: 4px 2px;
+  vertical-align: middle;
+  background: #091b2f;
+}
+.cell-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+.odds-input {
+  width: 100%;
+  text-align: center;
+  padding: 4px 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  background: transparent;
+  color: var(--ink);
+}
+.odds-input:focus { background: var(--panel); border-color: var(--blue); }
+.odds-input.down { color: var(--red); }
+.odds-input.up { color: var(--green); }
+.delta-label {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 2px;
+  height: 12px;
+  line-height: 12px;
+}
+.delta-label.down { color: var(--red); }
+.delta-label.up { color: var(--green); }
+.delta-label.same { opacity: 0; } /* скрываем нулевые изменения */
+
+.empty-msg { padding: 30px; text-align: center; color: var(--muted); }
+details { margin-bottom: 15px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+summary { font-weight: bold; color: var(--blue); cursor: pointer; font-size: 14px; }
+.details-content { margin-top: 10px; }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
-<body><main>
-<h1>Correct Score</h1>
-<p class="sub">Калькулятор точного счёта · импорт по ссылке и анализ движения коэффициентов.</p>
-<div class="top"><div class="field match"><label>Матч</label><input id="matchName" placeholder="Например, Venezia — Bologna"></div><div class="field"><label>Дата матча</label><input id="matchDate" type="date"></div><div class="mini">Изменение сравнивается с предыдущим обновлением.</div></div>
-<div class="top"><div class="field" style="flex:1;min-width:220px"><label>Ссылка на страницу Correct Score (NowGoal)</label><input id="matchUrl" type="url" placeholder="Вставь ссылку на матч NowGoal"></div><button class="btn primary" id="importUrl">Загрузить коэффициенты</button><button class="btn" id="openUrl">Открыть страницу</button><div class="mini" id="importStatus" role="status">Вставь ссылку на матч. Калькулятор попробует прочитать таблицу коэффициентов.</div></div>
-<div class="top" id="pasteWrap" style="display:none">
- <div class="field" style="flex:1;min-width:220px">
-  <label>Или вставь HTML страницы (открой страницу → Ctrl+U → выдели всё → скопируй → вставь сюда)</label>
-  <textarea id="pasteHtml" rows="4" placeholder="&lt;html&gt;...&lt;/html&gt;"></textarea>
- </div>
- <button class="btn primary" id="importPaste">Разобрать HTML</button>
-</div>
-<section class="pdfbox">
-<h2>Импорт PDF / фото таблицы NowGoal</h2>
-<p>Если PDF сохранён как фотография, калькулятор распознает изображение страницы (OCR), определит ячейки таблицы и покажет значения для проверки перед добавлением.</p>
-<div class="pdfactions"><input id="pdfFile" type="file" accept="application/pdf,.pdf"><button class="btn primary" id="scanPdf">Распознать PDF</button><button class="btn" id="applyPdf" disabled>Добавить в историю</button></div>
-<div class="progress"><i id="ocrProgress"></i></div><div class="mini" id="pdfStatus" role="status">Выбери PDF со снимком таблицы Correct Score.</div>
-<div class="preview" id="pdfPreview"></div>
-<p class="warn">Проверь распознанные цифры перед добавлением: маленькая десятичная точка может потеряться на фотографии. Поддерживается шаблон таблицы NowGoal Correct Score / Odds Change.</p>
-</section>
-<div class="stats"><div class="stat"><small>Обновлений</small><b id="nUpdates">0</b></div><div class="stat"><small>Коэффициентов заполнено</small><b id="nOdds">0</b></div><div class="stat"><small>Самое сильное падение</small><b id="topDown" style="color:var(--red)">—</b></div><div class="stat"><small>Самый сильный рост</small><b id="topUp" style="color:var(--green)">—</b></div></div>
+<body>
+<main>
+  <h1>Correct Score</h1>
+  <p class="sub">Калькулятор движения коэффициентов</p>
 
-<!-- НОВЫЙ БЛОК: Сводка изменений последнего обновления -->
-<div class="changes-panel" id="changesPanel">
-  <h3>Изменения за последнее обновление</h3>
-  <div class="changes-grid" id="changesGrid"></div>
-</div>
+  <div class="top-panel">
+    <div class="field">
+      <label>Матч</label>
+      <input id="matchName" placeholder="Например, Venezia — Bologna">
+    </div>
+    <div class="field">
+      <label>Дата</label>
+      <input id="matchDate" type="date">
+    </div>
+  </div>
 
-<div class="tools"><button class="btn primary" id="add">＋ Добавить обновление</button><button class="btn" id="addAll">Добавить пустые строки для всех счетов</button><button class="btn" id="csv">Скачать CSV</button><button class="btn" id="sample">Загрузить пример</button><button class="btn danger" id="clear">Очистить таблицу</button></div>
-<div class="legend"><span><i class="dot red"></i>Красный — коэффициент упал</span><span><i class="dot green"></i>Зелёный — коэффициент вырос</span><span>Серый — без изменения / первое значение</span></div>
-<div class="tablebox" id="tablebox"><div class="empty">Нажми «Добавить обновление», затем введи коэффициенты в таблицу.</div></div>
-<p class="note">Порядок колонок как на присланном фото. Верхняя группа — победа хозяев, средняя — ничья, нижняя — победа гостей. Вводи десятичные коэффициенты (например, 7.3). Строки автоматически окрашиваются относительно предыдущего обновления. Данные сохраняются в браузере на этом устройстве. Для хранения отдельно скачивай CSV.</p>
+  <div class="tools">
+    <button class="btn primary" id="addUpdate">+ Добавить обновление</button>
+    <button class="btn danger" id="clearAll">Очистить всё</button>
+  </div>
+
+  <div class="summary-box" id="summaryBox">
+    <h3>Изменения за последнее обновление</h3>
+    <div class="summary-grid" id="summaryGrid"></div>
+  </div>
+
+  <div class="table-container" id="tableContainer">
+    <div class="empty-msg">Нажми «Добавить обновление», чтобы начать.</div>
+  </div>
+
+  <details>
+    <summary>Импорт (PDF / Ссылка) / Экспорт</summary>
+    <div class="details-content">
+      <div class="tools" style="margin-top:10px;">
+        <button class="btn" id="exportCsv">Скачать CSV</button>
+        <button class="btn" id="loadSample">Загрузить пример</button>
+      </div>
+      
+      <div style="margin-top: 15px; border-top: 1px solid var(--line); padding-top: 15px;">
+        <label style="font-size:12px; color:var(--muted);">Ссылка на NowGoal:</label>
+        <input id="matchUrl" type="url" placeholder="https://..." style="margin: 5px 0;">
+        <div class="tools">
+          <button class="btn" id="importUrl">Импортировать</button>
+          <button class="btn" id="openUrl">Открыть сайт</button>
+        </div>
+        <div class="field" id="pasteWrap" style="display:none; margin-top:10px;">
+          <label>Если не сработало — вставь HTML-код страницы сюда:</label>
+          <textarea id="pasteHtml" rows="3"></textarea>
+          <button class="btn" id="importPaste" style="margin-top:5px;">Разобрать HTML</button>
+        </div>
+        <div class="sub" id="importStatus" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </details>
 </main>
+
 <script>
-const groups=[
- {name:'1',scores:['1:0','2:0','2:1','3:0','3:1','3:2','4:0','4:1','4:2','4:3']},
- {name:'X',scores:['0:0','1:1','2:2','3:3','4:4','other']},
- {name:'2',scores:['0:1','0:2','1:2','0:3','1:3','2:3','0:4','1:4','2:4','3:4']}
+// Группы счетов
+const groups = [
+  { name: '1', scores: ['1:0','2:0','2:1','3:0','3:1','3:2','4:0','4:1','4:2','4:3'] },
+  { name: 'X', scores: ['0:0','1:1','2:2','3:3','4:4','other'] },
+  { name: '2', scores: ['0:1','0:2','1:2','0:3','1:3','2:3','0:4','1:4','2:4','3:4'] }
 ];
-const allScores=groups.flatMap(g=>g.scores);let updates=[];let idSeq=1;const $=s=>document.querySelector(s);
-function val(x){if(x===undefined||x===null||String(x).trim()==='')return null;let n=Number(String(x).replace(',','.'));return Number.isFinite(n)&&n>0?n:null}
-function pct(a,b){return a&&b?(b-a)/a*100:null}function fmt(n){return n===null?'—':(n>0?'+':'')+n.toFixed(1)+'%'}
-function stamp(){let d=new Date();return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
-function addUpdate(time=stamp(),odds={}){updates.push({id:idSeq++,time,odds:{...odds}});render()}
+const allScores = groups.flatMap(g => g.scores);
+let updates = [];
+let idSeq = 1;
 
-// Возвращает класс (up/down) и процент изменения для конкретного счета
-function getChange(cur, prevOdds, score){
- if(cur===null || !prevOdds) return {cls:'', pct:''};
- const prev = val(prevOdds[score]);
- if(prev===null) return {cls:'', pct:''};
- const p = pct(prev, cur);
- const cls = cur < prev ? 'down' : cur > prev ? 'up' : 'same';
- return {cls, pct: (p > 0 ? '+' : '') + p.toFixed(1) + '%'};
+const $ = s => document.querySelector(s);
+
+// Форматирование
+function val(x) {
+  if (x === undefined || x === null || String(x).trim() === '') return null;
+  let n = Number(String(x).replace(',', '.'));
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+function fmtPct(n) {
+  if (n === null) return '';
+  return (n > 0 ? '+' : '') + n.toFixed(1) + '%';
+}
+function getStamp() {
+  let d = new Date();
+  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }) + ' ' + 
+         d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 }
 
-function isSuspectOdds(v){
- if(!v) return false;
- if(!/^\d+(?:\.\d+)?$/.test(v)) return true;
- const n = Number(v);
- if(!Number.isFinite(n) || n<=1) return true;
- if(/^\d+$/.test(v) && n>=2 && n<200) return true;
- return false;
+// Расчет изменения
+function calcChange(curInput, prevInput, score) {
+  let cur = val(curInput);
+  let prev = prevInput ? val(prevInput[score]) : null;
+  if (cur === null || prev === null) return { cls: '', pct: '' };
+  let p = ((cur - prev) / prev) * 100;
+  if (Math.abs(p) < 0.01) return { cls: 'same', pct: '0%' };
+  return {
+    cls: p < 0 ? 'down' : 'up',
+    pct: fmtPct(p)
+  };
 }
 
-function render(){
- let box=$('#tablebox');$('#nUpdates').textContent=updates.length;
- let filled=updates.reduce((n,u)=>n+allScores.filter(s=>val(u.odds[s])!==null).length,0);
- $('#nOdds').textContent=filled;
- 
- let moves=[];
- updates.forEach((u,i)=>{
-   if(!i)return;
-   allScores.forEach(s=>{
-     let a=val(updates[i-1].odds[s]),b=val(u.odds[s]),p=pct(a,b);
-     if(p!==null)moves.push({s,p})
-   })
- });
- let downs=moves.filter(x=>x.p<0).sort((a,b)=>a.p-b.p);
- let ups=moves.filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
- $('#topDown').textContent=downs.length?downs[0].s+' '+fmt(downs[0].p):'—';
- $('#topUp').textContent=ups.length?ups[0].s+' '+fmt(ups[0].p):'—';
+// Отрисовка
+function render() {
+  const box = $('#tableContainer');
+  const sumBox = $('#summaryBox');
+  const sumGrid = $('#summaryGrid');
 
- // Обновляем панель со списком всех изменений последнего шага
- const changesPanel = $('#changesPanel');
- const changesGrid = $('#changesGrid');
- if (updates.length > 1) {
-   const curr = updates[updates.length - 1];
-   const prev = updates[updates.length - 2];
-   let changedList = [];
-   allScores.forEach(s => {
-     const curVal = val(curr.odds[s]);
-     const ch = getChange(curVal, prev.odds, s);
-     if (ch.cls === 'up' || ch.cls === 'down') {
-       changedList.push({score: s, cls: ch.cls, pct: ch.pct});
-     }
-   });
-   if (changedList.length > 0) {
-     changesPanel.style.display = 'block';
-     changesGrid.innerHTML = changedList.map(item => 
-       `<div class="change-item"><div class="score">${item.score}</div><div class="delta ${item.cls}" style="margin:0;font-size:11px;">${item.pct}</div></div>`
-     ).join('');
-   } else {
-     changesPanel.style.display = 'none';
-   }
- } else {
-   changesPanel.style.display = 'none';
- }
+  if (updates.length === 0) {
+    box.innerHTML = '<div class="empty-msg">Нажми «Добавить обновление», чтобы начать.</div>';
+    sumBox.style.display = 'none';
+    return;
+  }
 
- if(!updates.length){box.innerHTML='<div class="empty">Нажми «Добавить обновление», затем введи коэффициенты в таблицу.</div>';return}
- let html='<table><thead><tr><th class="time">Time</th>'+groups[0].scores.map(s=>'<th class="scorecol">'+s+'</th>').join('')+'<th class="update">Update</th></tr></thead><tbody>';
- const pad=(n)=>'<td class="scorelabel"></td>'.repeat(10-n);
- 
- for(let origIdx=updates.length-1; origIdx>=0; origIdx--){
-  const u=updates[origIdx];
-  const prevU = origIdx>0 ? updates[origIdx-1] : null;
-  const prevOdds = prevU ? prevU.odds : null;
-  html+=`<tr class="update-start"><td class="timecell" rowspan="6"><input class="timestamp" data-time="${u.id}" value="${esc(u.time)}"><div class="rowtools"><button class="btn" data-copy="${u.id}" title="Скопировать обновление">⧉</button><button class="btn danger" data-remove="${u.id}" title="Удалить">×</button></div></td>`;
-  groups.forEach((g,gi)=>{
-   if(gi>0)html+='<tr class="market-start">';
-   g.scores.forEach(s=>{html+=`<td class="scorelabel">${s}</td>`});
-   html+=pad(g.scores.length);
-   if(gi===0)html+=`<td class="updatecell" rowspan="6">${origIdx+1} / ${updates.length}</td>`;
-   html+='</tr><tr>';
-   g.scores.forEach(s=>{
-    const cur=val(u.odds[s]);
-    const c=getChange(cur, prevOdds, s);
-    const v=u.odds[s]??'';
-    html+=`<td class="oddscell">
-      <input inputmode="decimal" autocomplete="off" data-odds="${u.id}|${esc(s)}" class="${c.cls}" value="${esc(v)}" placeholder="—" aria-label="${s} коэффициент">
-      <span class="delta ${c.cls}">${c.pct || '&nbsp;'}</span>
+  // --- Блок сводки изменений (для последнего обновления) ---
+  if (updates.length > 1) {
+    const curr = updates[updates.length - 1];
+    const prev = updates[updates.length - 2];
+    let htmlSum = '';
+    let hasChanges = false;
+
+    allScores.forEach(s => {
+      let ch = calcChange(curr.odds[s], prev.odds, s);
+      if (ch.cls === 'up' || ch.cls === 'down') {
+        hasChanges = true;
+        htmlSum += `<div class="summary-item">
+          <div class="score">${s}</div>
+          <div class="delta-label ${ch.cls}" style="opacity:1;">${ch.pct}</div>
+        </div>`;
+      }
+    });
+
+    if (hasChanges) {
+      sumGrid.innerHTML = htmlSum;
+      sumBox.style.display = 'block';
+    } else {
+      sumBox.style.display = 'none';
+    }
+  } else {
+    sumBox.style.display = 'none';
+  }
+
+  // --- Таблица ---
+  let html = '<table><thead><tr><th class="time-header">Time</th>';
+  // Заголовки (верхняя группа)
+  groups[0].scores.forEach(s => { html += `<th class="score-col">${s}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  // Идем с конца (новые сверху)
+  for (let i = updates.length - 1; i >= 0; i--) {
+    const u = updates[i];
+    const prevU = i > 0 ? updates[i - 1] : null;
+
+    // Строка с временем и рынком 1
+    html += `<tr><td class="time-cell" rowspan="3">
+      <input class="time-input" data-time="${u.id}" value="${u.time}">
+      <button class="btn danger" data-remove="${u.id}" style="padding:2px 6px; font-size:10px; margin-top:5px;">Удалить</button>
     </td>`;
-   });
-   html+=pad(g.scores.length).replaceAll('scorelabel','oddscell')+'</tr>';
-  });
- }
- html+='</tbody></table>';box.innerHTML=html;
+
+    groups.forEach((g, gi) => {
+      if (gi > 0) {
+        // Для рынков X и 2 добавляем новую строку (время уже занято rowspan)
+        html += '<tr>';
+      }
+      
+      g.scores.forEach(s => {
+        let curVal = u.odds[s] ?? '';
+        let ch = calcChange(curVal, prevU ? prevU.odds : null, s);
+        
+        // Если рынок X (там 6 счетов), а таблица рассчитана на 10 (как в 1 и 2), 
+        // добавляем пустые ячейки для выравнивания
+        if (g.scores.length < 10) {
+           // Этот момент пропускаем, так как структура групп задана жестко
+        }
+
+        html += `<td class="odds-cell">
+          <div class="cell-wrap">
+            <input class="odds-input ${ch.cls}" inputmode="decimal" data-odds="${u.id}|${s}" value="${curVal}" placeholder="—">
+            <span class="delta-label ${ch.cls}">${ch.pct || '0'}</span>
+          </div>
+        </td>`;
+      });
+
+      // Добиваем пустыми ячейками, если в группе меньше 10 счетов (для X)
+      if (g.scores.length < 10) {
+        const emptyCells = 10 - g.scores.length;
+        for (let k = 0; k < emptyCells; k++) {
+           html += '<td class="odds-cell" style="background:transparent;"></td>';
+        }
+      }
+
+      html += '</tr>';
+    });
+  }
+  html += '</tbody></table>';
+  box.innerHTML = html;
 }
 
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function save(){try{localStorage.setItem('nowgoal_correct_score_calc',JSON.stringify({updates,idSeq,matchName:$('#matchName').value,matchDate:$('#matchDate').value,matchUrl:$('#matchUrl').value}))}catch(e){}}
-function load(){try{let d=JSON.parse(localStorage.getItem('nowgoal_correct_score_calc'));if(d){updates=d.updates||[];idSeq=d.idSeq||1;$('#matchName').value=d.matchName||'';$('#matchDate').value=d.matchDate||'';$('#matchUrl').value=d.matchUrl||''}}catch(e){}render()}
-$('#add').onclick=()=>{addUpdate();save()};
-$('#addAll').onclick=()=>{let u=updates[updates.length-1];if(!u){addUpdate();u=updates[0]}allScores.forEach(s=>{if(u.odds[s]===undefined)u.odds[s]=''});render();save()};
-$('#tablebox').addEventListener('change',e=>{let t=e.target;
- if(t.dataset.odds){let [id,s]=t.dataset.odds.split('|');let u=updates.find(x=>x.id===+id);if(u)u.odds[s]=t.value;render();save()}
- if(t.dataset.time){let u=updates.find(x=>x.id===+t.dataset.time);if(u)u.time=t.value;save()}
+// Обработчики
+$('#addUpdate').addEventListener('click', () => {
+  const last = updates[updates.length - 1];
+  const newOdds = {};
+  // Автоматически копируем прошлые значения, если есть (удобно)
+  if (last) {
+    allScores.forEach(s => newOdds[s] = last.odds[s] || '');
+  }
+  updates.push({ id: idSeq++, time: getStamp(), odds: newOdds });
+  save();
+  render();
+  // Прокрутка вправо (к первому коэффициенту)
+  setTimeout(() => { $('.table-container').scrollLeft = 100; }, 10);
 });
-$('#tablebox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.odds){e.preventDefault();e.target.blur()}});
-$('#tablebox').addEventListener('click',e=>{let t=e.target;
- if(t.dataset.remove){updates=updates.filter(x=>x.id!==+t.dataset.remove);render();save()}
- if(t.dataset.copy){let u=updates.find(x=>x.id===+t.dataset.copy);if(u){let copy=JSON.parse(JSON.stringify(u));copy.id=idSeq++;copy.time=stamp();updates.push(copy);render();save()}}
+
+$('#clearAll').addEventListener('click', () => {
+  if (confirm('Удалить все данные?')) {
+    updates = [];
+    idSeq = 1;
+    save();
+    render();
+  }
 });
-$('#matchName').addEventListener('change',save);$('#matchDate').addEventListener('change',save);$('#matchUrl').addEventListener('change',save);
 
-function setImportStatus(msg){$('#importStatus').textContent=msg}
-function validNowgoalUrl(raw){try{let u=new URL(raw);return /^https?:$/.test(u.protocol)&&/(^|\.)nowgoal[^.]*\./i.test(u.hostname)?u:null}catch(e){return null}}
-function parseNowgoalHtml(html){
- const doc=new DOMParser().parseFromString(html,'text/html');
- const title=(doc.querySelector('h1')?.textContent||doc.title||'').trim();
- const found={}; let ambiguous=0;
- for(const tr of doc.querySelectorAll('tr')){
-  const cells=[...tr.querySelectorAll('td,th')];
-  for(let i=0;i<cells.length;i++){
-   const score=cells[i].textContent.trim().replace(/\s+/g,'');
-   if(!allScores.includes(score))continue;
-   const nums=[];
-   for(const c of cells.slice(i+1)){
-    const t=c.textContent.trim().replace(',','.');
-    if(/^\d+(?:\.\d+)?$/.test(t)){const n=Number(t);if(n>1&&n<10000)nums.push(t)}
-   }
-   if(nums.length){
-    if(nums.length>1)ambiguous++;
-    found[score]=nums[0];
-   }
-  }
- }
- return {found, ambiguous, title};
+// Сохранение и загрузка
+function save() {
+  try {
+    localStorage.setItem('cs_calc_v2', JSON.stringify({ updates, idSeq, matchName: $('#matchName').value, matchDate: $('#matchDate').value }));
+  } catch (e) {}
 }
-function applyParsedHtml(html, sourceLabel){
- const {found, ambiguous, title}=parseNowgoalHtml(html);
- const count=Object.keys(found).length;
- if(!count){
-  setImportStatus('Таблица коэффициентов не найдена в '+sourceLabel+'. Проверь, что скопирован полный HTML страницы с таблицей Correct Score.');
-  return false;
- }
- if(title && title.length<140) $('#matchName').value=title.replace(/\s+/g,' ');
- $('#matchName').dispatchEvent(new Event('change'));
- addUpdate(stamp(), found);
- save();
- let msg='Импортировано значений: '+count+'.';
- if(ambiguous>0) msg+=' В '+ambiguous+' строках было несколько чисел — взято первое (основная колонка). Сверь цифры перед сохранением.';
- setImportStatus(msg);
- return true;
+function load() {
+  try {
+    let d = JSON.parse(localStorage.getItem('cs_calc_v2'));
+    if (d) {
+      updates = d.updates || [];
+      idSeq = d.idSeq || 1;
+      $('#matchName').value = d.matchName || '';
+      $('#matchDate').value = d.matchDate || '';
+    }
+  } catch (e) {}
+  render();
 }
-$('#openUrl').onclick=()=>{const u=validNowgoalUrl($('#matchUrl').value.trim());if(!u){setImportStatus('Вставь корректную ссылку NowGoal.');return}window.open(u.href,'_blank','noopener');};
-$('#importUrl').onclick=async()=>{
- const u=validNowgoalUrl($('#matchUrl').value.trim());
- if(!u){setImportStatus('Это не похоже на ссылку NowGoal. Проверь адрес.');return}
- save();
- setImportStatus('Пробую загрузить страницу и найти коэффициенты…');
- try{
-  const r=await fetch(u.href,{method:'GET',mode:'cors',credentials:'omit'});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  const html=await r.text();
-  applyParsedHtml(html, 'странице');
- }catch(e){
-  $('#pasteWrap').style.display='';
-  setImportStatus('Не удалось автоматически прочитать страницу: браузер или NowGoal ограничивает доступ (часто это CORS). Открой страницу кнопкой «Открыть страницу», нажми Ctrl+U, скопируй весь HTML и вставь его в поле ниже — калькулятор разберёт его локально. Ошибка: '+(e.message||'доступ запрещён'));
- }
-};
-$('#importPaste').onclick=()=>{const html=$('#pasteHtml').value;if(!html || html.trim().length<50){setImportStatus('Вставь HTML страницы NowGoal в поле выше.');return}applyParsedHtml(html, 'вставленном HTML');};
-$('#clear').onclick=()=>{if(confirm('Удалить все обновления?')){updates=[];render();save()}};
-$('#sample').onclick=()=>{updates=[];let samples=[['09-11 19:30',[11,19,13,50,210,30,45,35,50,100,11,5.9,13,55,210,0,6.9,9.5,7.5,19,14.5,22,45,35,50,100]],['10-11 23:22',[9.5,20,13,50,190,30,170,100,95,120,9.5,5.8,13,50,190,0,6,9,7.5,20,15,25,55,40,55,100]],['27-11 03:10',[7.3,15.5,10,45,28,35,140,90,95,140,7.1,5.2,13.5,60,220,0,6.1,11.5,8.4,30,20,28,90,60,70,120]]];samples.forEach(([time,vals])=>{let o={};allScores.forEach((s,i)=>o[s]=String(vals[i]));updates.push({id:idSeq++,time,odds:o})});render();save()};
-$('#csv').onclick=()=>{let rows=[['Время',...allScores]];updates.forEach(u=>rows.push([u.time,...allScores.map(s=>u.odds[s]??'')]));let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='correct-score-history.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 
-// ---------- OCR импорт из PDF ----------
-let pdfSnapshots=[];
-const ocrRowY=[206,254,302,350,398,446,493,541,589,637,685,733].map(v=>v/1682);
-const ocrColX=[238,329,420,511,602,693,784,875,966,1057].map(v=>v/1190);
-function pdfStatus(t){$('#pdfStatus').textContent=t}
-function nearestIndex(v,arr){let best=-1,dist=Infinity;arr.forEach((x,i)=>{let d=Math.abs(v-x);if(d<dist){dist=d;best=i}});return {index:best,distance:dist}}
-function cleanOcrNumber(raw){let t=String(raw).replace(',', '.').replace(/[^0-9.]/g,'');if(!t||!/^\d+(?:\.\d+)?$/.test(t))return null;let n=Number(t);if(!Number.isFinite(n)||n<=0||n>10000)return null;return t}
-function renderPdfPreview(){
- let host=$('#pdfPreview');if(!pdfSnapshots.length){host.innerHTML='';return}
- let html='';
- pdfSnapshots.forEach((snap,si)=>{
-  html+='<section class="snapcard"><h3>Снимок '+(si+1)+' · '+esc(snap.time)+'</h3>';
-  groups.forEach((g,gi)=>{
-   html+='<div class="marketcard"><h4>'+(gi===0?'Победа хозяев (1)':gi===1?'Ничья (X)':'Победа гостей (2)')+'</h4><div class="oddsgrid">';
-   g.scores.forEach(score=>{
-    const v=snap.odds[score]??'';
-    const suspect=isSuspectOdds(v);
-    html+='<div class="oddsedit"><label>'+esc(score)+'</label><input data-pdf="'+si+'|'+esc(score)+'" value="'+esc(v)+'" inputmode="decimal" placeholder="—" class="'+(suspect?'suspect':'')+'"></div>';
-   });
-   html+='</div></div>';
-  });
-  html+='</section>';
- });
- host.innerHTML=html;
- host.querySelectorAll('input[data-pdf]').forEach(inp=>{
-  inp.addEventListener('input',()=>{
-   const [i,score]=inp.dataset.pdf.split('|');
-   pdfSnapshots[+i].odds[score]=inp.value.trim();
-  });
-  inp.addEventListener('change',()=>{
-   const [i,score]=inp.dataset.pdf.split('|');
-   const v=inp.value.trim().replace(',','.');
-   inp.classList.toggle('suspect', isSuspectOdds(v));
-   pdfSnapshots[+i].odds[score]=v;
-  });
- });
- $('#applyPdf').disabled=false;
-}
-$('#scanPdf').onclick=async()=>{
- const file=$('#pdfFile').files?.[0];
- if(!file){pdfStatus('Сначала выбери PDF-файл.');return}
- if(!window.pdfjsLib||!window.Tesseract){pdfStatus('Не удалось загрузить PDF.js или OCR. Проверь интернет-соединение и открой калькулятор снова.');return}
- $('#scanPdf').disabled=true;$('#applyPdf').disabled=true;$('#ocrProgress').style.width='0%';
- pdfSnapshots=[];$('#pdfPreview').innerHTML='';
- let worker; let totalAccepted=0,totalRejected=0;
- try{
-  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  const buf=await file.arrayBuffer();
-  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
-  pdfStatus('PDF открыт. Страниц: '+pdf.numPages+'. Загружаю распознавание…');
-  worker=await Tesseract.createWorker('eng',1,{
-   workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
-   corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js',
-   langPath:'https://tessdata.projectnaptha.com/4.0.0',
-   logger:m=>{if(m.status==='recognizing text'){$('#ocrProgress').style.width=Math.round((m.progress||0)*100)+'%';pdfStatus('Распознаю изображение: '+Math.round((m.progress||0)*100)+'%')}}
-  });
-  for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
-   const page=await pdf.getPage(pageNo);
-   const viewport=page.getViewport({scale:2.4});
-   const canvas=document.createElement('canvas');
-   canvas.width=Math.round(viewport.width);canvas.height=Math.round(viewport.height);
-   await page.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
-   const result=await worker.recognize(canvas);
-   const words=result.data.words||[];
-   const snaps=Array.from({length:4},(_,i)=>({time:'PDF стр.'+pageNo+' · снимок '+(i+1),odds:{}}));
-   for(const w of words){
-    if((w.confidence??0)<25)continue;
-    const raw=cleanOcrNumber(w.text);
-    if(raw===null)continue;
-    const cx=((w.bbox.x0+w.bbox.x1)/2)/canvas.width;
-    const cy=((w.bbox.y0+w.bbox.y1)/2)/canvas.height;
-    const ci=nearestIndex(cx,ocrColX);
-    const ri=nearestIndex(cy,ocrRowY);
-    if(ci.distance>0.045 || ri.distance>0.008){totalRejected++;continue}
-    const snapIndex=Math.floor(ri.index/3);
-    const marketRow=ri.index%3;
-    if(snapIndex<0||snapIndex>=4)continue;
-    const score=groups[marketRow].scores[ci.index];
-    if(score===undefined)continue;
-    snaps[snapIndex].odds[score]=raw;
-    totalAccepted++;
-   }
-   while(snaps.length && Object.keys(snaps[snaps.length-1].odds).length===0) snaps.pop();
-   snaps.forEach(snap=>pdfSnapshots.push(snap));
-  }
-  const total=pdfSnapshots.reduce((n,x)=>n+Object.keys(x.odds).length,0);
-  if(!total){
-   let diag='';
-   if(totalRejected>0) diag=' Найдено '+totalRejected+' чисел, но ни одно не попало в ожидаемую сетку координат — возможно, в PDF другой масштаб или шаблон.';
-   pdfStatus('Не удалось найти коэффициенты в таблице.'+diag+' Убедись, что таблица Correct Score полностью видна в PDF.');
-   return;
-  }
-  renderPdfPreview();
-  $('#ocrProgress').style.width='100%';
-  let msg='Распознано снимков: '+pdfSnapshots.length+'. Найдено ячеек: '+total+'.';
-  if(totalRejected > totalAccepted*0.3) msg+=' Отброшено по координатам: '+totalRejected+' — если значения неполные, шаблон страницы мог отличаться.';
-  msg+=' Жёлтым отмечены подозрительные целые (возможно, потеряна десятичная точка). Все поля можно исправить вручную.';
-  pdfStatus(msg);
- }catch(e){
-  console.error('PDF OCR error',e);
-  pdfStatus('Ошибка распознавания: '+(e?.message||String(e)||'неизвестная ошибка')+'. Пришли скриншот этого сообщения.');
- }finally{
-  if(worker){try{await worker.terminate()}catch(e){}}
-  $('#scanPdf').disabled=false;
- }
-};
-$('#applyPdf').onclick=()=>{if(!pdfSnapshots.length)return;pdfSnapshots.forEach(s=>addUpdate(s.time,s.odds));save();pdfStatus('Добавлено обновлений: '+pdfSnapshots.length+'. Коэффициенты сохранены в истории калькулятора.');$('#applyPdf').disabled=true};
+$('#matchName').addEventListener('input', save);
+$('#matchDate').addEventListener('input', save);
 
+// Делегирование событий для таблицы
+$('#tableContainer').addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.dataset.odds) {
+    let [id, s] = t.dataset.odds.split('|');
+    let u = updates.find(x => x.id === +id);
+    if (u) {
+      u.odds[s] = t.value;
+      save();
+      render(); // Перерисовываем, чтобы обновить проценты
+    }
+  }
+  if (t.dataset.time) {
+    let u = updates.find(x => x.id === +t.dataset.time);
+    if (u) {
+      u.time = t.value;
+      save();
+    }
+  }
+});
+
+$('#tableContainer').addEventListener('click', (e) => {
+  if (e.target.dataset.remove) {
+    updates = updates.filter(x => x.id !== +e.target.dataset.remove);
+    save();
+    render();
+  }
+});
+
+// CSV
+$('#exportCsv').addEventListener('click', () => {
+  let rows = [['Время', ...allScores]];
+  updates.forEach(u => rows.push([u.time, ...allScores.map(s => u.odds[s] ?? '')]));
+  let csv = '\ufeff' + rows.map(r => r.map(x => '"' + String(x).replaceAll('"', '""') + '"').join(';')).join('\n');
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'correct_score.csv';
+  a.click();
+});
+
+// Пример
+$('#loadSample').addEventListener('click', () => {
+  updates = [];
+  let samples = [
+    ['01-01 12:00', [11,19,13,50,210,30,45,35,50,100,11,5.9,13,55,210,0,6.9,9.5,7.5,19,14.5,22,45,35,50,100]],
+    ['01-01 14:30', [9.5,20,13,50,190,30,170,100,95,120,9.5,5.8,13,50,190,0,6,9,7.5,20,15,25,55,40,55,100]],
+    ['01-01 17:00', [7.3,15.5,10,45,28,35,140,90,95,140,7.1,5.2,13.5,60,220,0,6.1,11.5,8.4,30,20,28,90,60,70,120]]
+  ];
+  samples.forEach(([time, vals]) => {
+    let o = {};
+    allScores.forEach((s, i) => o[s] = String(vals[i]));
+    updates.push({ id: idSeq++, time, odds: o });
+  });
+  save();
+  render();
+});
+
+// Парсинг ссылки
+$('#openUrl').addEventListener('click', () => {
+  let url = $('#matchUrl').value.trim();
+  if (url) window.open(url, '_blank');
+});
+
+$('#importUrl').addEventListener('click', async () => {
+  let url = $('#matchUrl').value.trim();
+  if (!url) return;
+  $('#importStatus').textContent = 'Загрузка...';
+  try {
+    let r = await fetch(url);
+    let text = await r.text();
+    parseAndLoadHtml(text);
+  } catch (e) {
+    $('#pasteWrap').style.display = 'block';
+    $('#importStatus').textContent = 'Ошибка доступа (CORS). Скопируй HTML страницы и вставь ниже.';
+  }
+});
+
+$('#importPaste').addEventListener('click', () => {
+  parseAndLoadHtml($('#pasteHtml').value);
+});
+
+function parseAndLoadHtml(html) {
+  let doc = new DOMParser().parseFromString(html, 'text/html');
+  let found = {};
+  doc.querySelectorAll('tr').forEach(tr => {
+    let cells = [...tr.querySelectorAll('td, th')];
+    for (let i = 0; i < cells.length; i++) {
+      let text = cells[i].textContent.trim().replace(/\s+/g, '');
+      if (allScores.includes(text)) {
+        // Ищем первое подходящее число после счета
+        for (let j = i + 1; j < cells.length; j++) {
+          let numStr = cells[j].textContent.trim().replace(',', '.');
+          if (/^\d+(\.\d+)?$/.test(numStr)) {
+            let n = Number(numStr);
+            if (n > 1 && n < 1000) {
+              found[text] = numStr;
+              break;
+            }
+          }
+        }
+      }
+    }
+  });
+  if (Object.keys(found).length > 0) {
+    updates.push({ id: idSeq++, time: getStamp(), odds: found });
+    save();
+    render();
+    $('#importStatus').textContent = `Импортировано: ${Object.keys(found).length} коэф.`;
+    $('#pasteWrap').style.display = 'none';
+  } else {
+    $('#importStatus').textContent = 'Коэффициенты не найдены в коде.';
+  }
+}
+
+// Запуск
 load();
-</script></body></html>
+</script>
+</body>
+</html>
