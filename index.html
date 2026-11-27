@@ -1,530 +1,604 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Correct Score — Калькулятор</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Калькулятор коэффициентов</title>
 <style>
-:root {
-  --bg: #061426;
-  --panel: #0b1e35;
-  --line: #1e3d5d;
-  --ink: #edf4ff;
-  --muted: #91a6c4;
-  --green: #32d583;
-  --red: #ff6474;
-  --blue: #1688ff;
+:root{color-scheme:dark;--ink:#f4f7ff;--muted:#a9c7e8;--line:#17385b;--head:#082b53;--green:#00e676;--red:#ff344d;--blue:#008cff;--cyan:#00c2ff;--bg:#020817;--panel:#071a35;--panel2:#0b2342}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{
+  margin:0;background-color:#020817;
+  background:radial-gradient(ellipse at 50% -18%,#064b86 0,#061b35 30%,#020817 72%);
+  color:var(--ink);font:14px Arial,Helvetica,sans-serif;min-height:100vh;padding-bottom:76px;
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  -webkit-text-size-adjust: 100%;
-}
-main { padding: 12px; max-width: 1000px; margin: 0 auto; }
-h1 { font-size: 20px; margin: 0 0 5px; }
-.sub { color: var(--muted); font-size: 12px; margin: 0 0 15px; }
-.top-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 15px; }
-.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-.field label { font-size: 12px; color: var(--muted); }
-input, button, textarea { font: inherit; }
-input {
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 8px 10px;
-  background: #07182b;
-  color: var(--ink);
-  width: 100%;
-}
-input:focus, textarea:focus { outline: 2px solid var(--blue); }
-.btn {
-  border: 1px solid var(--line);
-  background: #102b49;
-  color: var(--ink);
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-weight: bold;
-  cursor: pointer;
-  display: inline-block;
-  text-align: center;
-}
-.btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
-.btn.danger { color: var(--red); border-color: #4a212d; }
-.btn:hover { opacity: 0.9; }
-.btn:active { transform: scale(0.98); }
-.tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
-.tools .btn { flex: 1 1 40%; font-size: 13px; }
+main{max-width:1440px;margin:0 auto;padding:0 16px 28px}h1{font-size:clamp(23px,3vw,34px);margin:0;letter-spacing:-.5px}.sub{color:#b4cce8;margin:5px 0 0;line-height:1.5}
+.appbar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 20px;margin:0 -16px 12px;background:linear-gradient(110deg,#06152b 0%,#062c55 55%,#031329 100%);border-bottom:1px solid #00aaff;box-shadow:0 8px 30px #00152f;overflow:hidden}
+.appbar:after{content:"";position:absolute;top:0;bottom:0;left:0;right:0;background:linear-gradient(130deg,transparent 35%,#008cff22 35.2%,transparent 55%);pointer-events:none}
+.brand{font-size:clamp(24px,4vw,36px);font-weight:900;font-style:italic;letter-spacing:-1.5px}.brand span{color:#00c2ff}.brand small{font-size:13px;font-style:normal;font-weight:600;letter-spacing:0;color:#c8e8ff;margin-left:12px;border-left:1px solid #1a8cd4;padding-left:14px}.app-actions{display:flex;gap:8px}.app-actions a{color:#d9efff;text-decoration:none;border:1px solid #1476c4;border-radius:22px;padding:10px 14px;background:#061b35;font-weight:700}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}.hero-stat{min-height:104px;display:flex;align-items:center;justify-content:center;gap:16px;padding:14px;border-radius:18px;text-align:center;background:linear-gradient(120deg,#16091b,#31091b 55%,#10091c);border:1px solid #ff345d;box-shadow:0 0 17px #ff174d55,inset 0 0 20px #ff174d18}.hero-stat.up{background:linear-gradient(120deg,#03251e,#03452d 55%,#031a20);border-color:#00e676;box-shadow:0 0 17px #00e67655,inset 0 0 20px #00e67618}.hero-stat .arrow{font-size:46px;font-weight:900;color:#ff425e;text-shadow:0 0 14px #ff345d}.hero-stat.up .arrow{color:#00f58a;text-shadow:0 0 14px #00e676}.hero-stat small{display:block;color:#f5eaf0;font-size:15px;font-weight:700}.hero-stat strong{display:block;font-size:clamp(27px,4vw,42px);line-height:1.15}.hero-stat.up strong{color:#eafff3}.hero-stat .caption{font-size:12px;color:#d4e7f7}
+.navtabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 14px;padding:0 0 3px}.navtabs a{flex:1 0 auto;text-align:center;text-decoration:none;color:#c6e4ff;padding:12px 15px;border:1px solid #087bd2;border-radius:30px;background:linear-gradient(130deg,#0a2444,#041329);font-weight:700}.navtabs a.active{background:linear-gradient(120deg,#009dff,#0757c9);color:#fff;box-shadow:0 0 16px #008cff88;border-color:#42caff}
+.dashboard-grid{display:grid;grid-template-columns:1fr;gap:14px;align-items:start}.panel{background:linear-gradient(145deg,#071a35,#041329);border:1px solid #078cff;border-radius:17px;overflow:hidden;box-shadow:0 0 14px #008cff20,inset 0 0 20px #008cff08;margin:0 0 14px}.panel-title{padding:14px 17px;background:linear-gradient(100deg,#0b3562,#071a35);border-bottom:1px solid #087bd2;font-size:17px;font-weight:800}.panel-body{padding:14px}
 
-/* Блок сводки изменений */
-.summary-box {
-  background: linear-gradient(145deg, #102b49, #0a1c31);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 15px;
-  display: none;
-}
-.summary-box h3 { font-size: 14px; margin: 0 0 10px; color: #8fc5ff; }
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
-.summary-item { background: #0d2743; padding: 8px 4px; border-radius: 6px; text-align: center; border: 1px solid var(--line); }
-.summary-item .score { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.filter-controls {display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;}
+.filter-btn {background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--muted); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;}
+.filter-btn.active {background: rgba(0, 140, 255, 0.15); border-color: var(--blue); color: var(--cyan); box-shadow: 0 0 10px rgba(0, 140, 255, 0.2);}
+.filter-btn:active {transform: scale(0.96);}
 
-/* Таблица */
-.table-container {
-  background: #081a2e;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin-bottom: 15px;
-}
-table {
-  border-collapse: collapse;
-  min-width: 1000px;
-  table-layout: fixed;
-  width: 100%;
-}
-th, td {
-  border: 1px solid var(--line);
-  text-align: center;
-}
-thead th {
-  background: #123456;
-  padding: 8px 4px;
-  font-size: 12px;
-  color: #d7e9ff;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-th.score-col { width: 70px; }
+.summary-table{width:100%;border-collapse:collapse;min-width:0;table-layout:auto}.summary-table th{background:#0b2342;color:#b9d8fa;font-size:11px;padding:11px 2px;border:1px solid #17385b}.summary-table td{padding:10px 2px;text-align:center;border:1px solid #17385b;font-weight:700;font-size:13px}.summary-table tr:nth-child(even) td{background:#0a203b}.summary-table .score{font-size:15px;color:#fff}.pill{display:inline-block;padding:4px 6px;border-radius:20px;font-weight:800;white-space:nowrap;font-size:11px}.pill.down{background:linear-gradient(90deg,#9f1029,#4a0717);color:#fff}.pill.up{background:linear-gradient(90deg,#087d43,#034526);color:#fff}.prob-text{font-size:14px;color:#00c2ff;font-weight:800;}
+.top-movers{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mover{border-radius:15px;overflow:hidden;background:#071a35;border:1px solid #ff345d}.mover.grow{border-color:#00e676}.mover h3{margin:0;padding:11px 12px;background:#390b1a;color:#fff;font-size:15px}.mover.grow h3{background:#063b29}.mover-line{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 10px;border-top:1px solid #183451;font-size:12px}.mover-line b{font-size:13px}.lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.donut-area{display:flex;align-items:center;justify-content:space-around;gap:16px;flex-wrap:wrap;padding:16px}.donut{width:145px;height:145px;border-radius:50%;background:conic-gradient(#333 0 100%);display:grid;place-items:center;position:relative;transition:background 0.5s ease;}.donut:after{content:"";position:absolute;width:94px;height:94px;border-radius:50%;background:#071a35}.donut b{position:relative;z-index:1;font-size:23px}.legend-list{display:grid;gap:12px;color:#d5e8fa}.legend-list span{display:flex;align-items:center;gap:8px}.legend-list i{width:12px;height:12px;border-radius:2px}
+.insights{padding:15px;line-height:1.8;color:#dcecff}
+.insight-title {font-size: 13px; color: var(--muted); text-transform: uppercase; font-weight: 700; margin-bottom: 10px;}
+.prob-bar-wrap {margin-bottom: 12px;}
+.prob-bar-head {display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 4px;}
+.prob-bar-bg {background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;}
+.prob-bar-fill {background: linear-gradient(90deg, #008cff, #00c2ff); height: 100%; border-radius: 4px;}
 
-/* Прилипающая колонка времени */
-th.time-header, td.time-cell {
-  width: 90px;
-  position: sticky;
-  left: 0;
-  z-index: 3;
-  background: #0d2743;
+.btn{border:1px solid #315477;background:#102b49;color:#e5f1ff;border-radius:8px;padding:10px 13px;font-weight:700;cursor:pointer;font-size:14px;}.btn:hover{background:#173b62}.btn.primary{background:linear-gradient(135deg,#1688ff,#0758b8);color:white;border-color:#2997ff;box-shadow:0 4px 14px #087cff44}.btn.danger{color:#ff8792;border-color:#7c3543}.btn.gold{background:linear-gradient(180deg,#ffea00 0%,#d4a000 100%);color:#000;border:none;box-shadow:0 4px 15px rgba(212,160,0,0.4);}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.stats{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:9px;margin-bottom:12px}.stat{background:linear-gradient(145deg,#102b49,#0a1c31);border:1px solid #25496e;border-radius:10px;padding:12px;box-shadow:0 5px 16px #0003}.stat small{display:block;color:#9eb4d0;font-size:11px}.stat b{display:block;font-size:19px;margin-top:5px}
+.history-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0 10px}.history-head h2{font-size:19px;margin:0}.bottom-nav{position:fixed;z-index:10;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:0;background:#041329f2;border-top:1px solid #087bd2;backdrop-filter:blur(14px);padding:7px max(8px,calc((100vw - 1100px)/2))}.bottom-nav a{flex:1;text-align:center;text-decoration:none;color:#b9d8fa;padding:7px 3px;border-right:1px solid #17385b;font-size:11px}.bottom-nav a:last-child{border:0}.bottom-nav b{display:block;font-size:20px;margin-bottom:3px}.bottom-nav .selected{color:#00c2ff;text-shadow:0 0 10px #00aaff}
+.mini{font-size:11px;color:#9bb2ce}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(2,8,23,0.9);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:flex-end;justify-content:center}
+.modal-content{background:var(--panel);width:100%;max-width:600px;border-radius:24px 24px 0 0;border-top:2px solid var(--blue-border);padding:15px 15px 0 15px;box-shadow:0 -10px 40px rgba(0, 140, 255, 0.2);display:flex;flex-direction:column;max-height:95vh}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--chart-grid)}
+.modal-header h2{margin:0;font-size:18px;color:#fff;font-weight:800}
+.close-btn{background:none;border:none;color:#ff344d;font-size:24px;cursor:pointer;padding:0;line-height:1}
+.modal-body{overflow-y:auto;flex:1;padding:0 5px 15px 5px;}
+.modal-group-title{grid-column: 1 / -1; font-size:12px;color:var(--blue-light);margin:15px 0 5px;text-transform:uppercase;font-weight:700;border-bottom:1px solid rgba(0,194,255,0.2);padding-bottom:5px;}
+.inputs-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 10px;}
+.input-card {display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; border: 1px solid var(--line);}
+.input-card label {font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; justify-content: space-between;}
+.input-card .prev-val {font-size: 10px; color: var(--muted); font-weight: normal;}
+.input-card input {width: 100%; background: var(--bg-main); border: 1px solid var(--chart-grid); border-radius: 6px; color: var(--green); font-size: 18px; font-weight: 800; text-align: center; padding: 8px; font-variant-numeric: tabular-nums;}
+.input-card input:focus {outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(0,140,255,0.3);}
+.input-card input:not(:placeholder-shown) {background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);}
+.modal-footer {position: sticky; bottom: 0; background: var(--panel); padding: 15px 0; margin: 0 -15px; padding-left: 15px; padding-right: 15px; border-top: 1px solid var(--line); z-index: 10; padding-bottom: max(15px, env(safe-area-inset-bottom));}
+.history-card {background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 12px;}
+.history-card-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;}
+.history-time {font-size: 13px; font-weight: 700; color: var(--cyan); display: flex; align-items: center; gap: 5px;}
+.history-delete {background: rgba(255, 52, 77, 0.1); border: 1px solid rgba(255, 52, 77, 0.3); color: var(--red); border-radius: 6px; width: 26px; height: 26px; display: grid; place-items: center; cursor: pointer; font-size: 14px; transition: 0.2s;}
+.history-delete:hover {background: rgba(255, 52, 77, 0.3);}
+.history-grid {display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;}
+.history-pill {background: #0b2342; border-radius: 6px; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #17385b;}
+.h-history-pill.empty {opacity: 0.3;}
+.h-score {font-size: 10px; color: var(--muted); font-weight: 600;}
+.h-val {font-size: 13px; font-weight: 800; color: #fff;}
+.parser-block {margin-bottom: 15px; background: rgba(0, 140, 255, 0.05); border: 1px solid rgba(0, 140, 255, 0.3); padding: 12px; border-radius: 12px;}
+.parser-block label {display: block; font-size: 12px; color: var(--cyan); font-weight: 700; margin-bottom: 8px;}
+.parser-block textarea {width: 100%; background: var(--bg-main); border: 1px solid var(--line); border-radius: 8px; color: #fff; padding: 10px; font-size: 14px; margin-bottom: 8px; resize: vertical; min-height: 80px; font-family: inherit;}
+.parser-block textarea:focus {outline: none; border-color: var(--blue);}
+
+/* ====== НОВЫЙ ДИЗАЙН КАРТОЧКИ (КАК НА МАКЕТЕ) ====== */
+#shareCardContainer { position: fixed; top: -9999px; left: -9999px; width: 400px; height: 650px; }
+.share-card {
+  width: 100%; height: 100%;
+  background: #030712;
+  background-image: 
+    radial-gradient(circle at 50% 0%, #003a8c 0%, transparent 60%),
+    radial-gradient(circle at 50% 100%, #4a3300 0%, transparent 60%);
+  border: 2px solid #ffd700;
+  border-radius: 24px;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
 }
-th.time-header { z-index: 4; background: #123456; }
-td.time-cell {
-  font-size: 11px;
-  color: var(--muted);
-  vertical-align: top;
-  padding: 8px 4px;
+/* Имитация прожекторов на фоне */
+.share-card::before {
+  content: ''; position: absolute; top: -100px; left: -50px; width: 200px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0, 162, 255, 0.15) 0%, transparent 70%); transform: rotate(-30deg);
 }
-.time-input {
-  width: 100%;
-  text-align: center;
-  border: none;
-  background: transparent;
-  padding: 4px 0;
-  font-size: 11px;
-  color: var(--ink);
+.share-card::after {
+  content: ''; position: absolute; top: -100px; right: -50px; width: 200px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0, 162, 255, 0.15) 0%, transparent 70%); transform: rotate(30deg);
 }
 
-/* Ячейка с коэффициентом */
-td.odds-cell {
-  padding: 4px 2px;
-  vertical-align: middle;
-  background: #091b2f;
-}
-.cell-wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-}
-.odds-input {
-  width: 100%;
-  text-align: center;
-  padding: 4px 0;
-  border: 1px solid transparent;
+/* Корона и Мяч */
+.share-icons { display: flex; align-items: flex-end; justify-content: center; gap: 10px; z-index: 2; margin-bottom: -10px;}
+.share-icons svg { filter: drop-shadow(0 0 15px rgba(255,215,0,0.6)); }
+
+/* Плашка Точный счет */
+.share-title-wrap {
+  background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+  padding: 8px 30px;
   border-radius: 4px;
-  font-size: 14px;
-  font-weight: bold;
-  background: transparent;
-  color: var(--ink);
+  border: 1px solid #fff3b0;
+  transform: skewX(-10deg);
+  z-index: 3;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  margin-bottom: 30px;
 }
-.odds-input:focus { background: var(--panel); border-color: var(--blue); }
-.odds-input.down { color: var(--red); }
-.odds-input.up { color: var(--green); }
-.delta-label {
-  font-size: 10px;
-  font-weight: bold;
-  margin-top: 2px;
-  height: 12px;
-  line-height: 12px;
+.share-title-text {
+  color: #000; font-size: 26px; font-weight: 900; text-transform: uppercase;
+  transform: skewX(10deg); letter-spacing: 1px; margin: 0;
 }
-.delta-label.down { color: var(--red); }
-.delta-label.up { color: var(--green); }
-.delta-label.same { opacity: 0; } /* скрываем нулевые изменения */
 
-.empty-msg { padding: 30px; text-align: center; color: var(--muted); }
-details { margin-bottom: 15px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
-summary { font-weight: bold; color: var(--blue); cursor: pointer; font-size: 14px; }
-.details-content { margin-top: 10px; }
+/* Карточки статов */
+.share-stats-row { display: flex; width: 100%; gap: 15px; margin-bottom: 20px; z-index: 2; }
+.share-stat-box {
+  flex: 1; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,215,0,0.3); 
+  border-radius: 16px; padding: 20px 10px; text-align: center;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+.share-stat-title { font-size: 16px; color: #fff; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; }
+.share-stat-score { font-size: 42px; font-weight: 900; margin-bottom: 5px; color: #fff; }
+.share-stat-pct { font-size: 22px; font-weight: 900; }
+.share-stat-box.down .share-stat-pct { color: #ff344d; text-shadow: 0 0 15px rgba(255,52,77,0.6); }
+.share-stat-box.up .share-stat-pct { color: #00e676; text-shadow: 0 0 15px rgba(0,230,118,0.6); }
+
+/* Золотая кнопка внизу */
+.share-bottom-btn {
+  width: 90%; padding: 16px; background: linear-gradient(180deg, #ffea00 0%, #d4a000 100%);
+  border-radius: 30px; color: #000; font-size: 16px; font-weight: 900; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.3); border: 1px solid #fff; z-index: 2;
+}
+
+/* Модальное окно для просмотра фото */
+#imagePreviewModal { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+#imagePreviewModal img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+.preview-actions { display: flex; gap: 10px; margin-top: 20px; width: 100%; max-width: 400px; }
+.preview-actions button { flex: 1; padding: 15px; border-radius: 12px; font-weight: 800; font-size: 16px; border: none; cursor: pointer; }
+.btn-share-native { background: var(--blue); color: #fff; }
+.btn-download { background: var(--green); color: #000; }
+.btn-close-preview { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; display: grid; place-items: center; }
+
+@media(max-width:760px){main{padding:0 10px 22px}.appbar{margin:0 -10px 10px;padding:13px 12px}.brand small{display:none}.app-actions a{padding:8px 10px;font-size:12px}.dashboard-grid,.lower-grid{grid-template-columns:1fr}.top-movers{grid-template-columns:1fr 1fr}.hero-stat{gap:7px;padding:12px 5px;min-height:92px}.hero-stat .arrow{font-size:32px}.hero-stat small{font-size:12px}.hero-stat .caption{font-size:10px}.stats{grid-template-columns:repeat(2,minmax(120px,1fr))}.summary-table th{font-size:10px;padding:8px 1px}.summary-table td{font-size:11px;padding:8px 1px}.summary-table .score{font-size:13px;}.summary-table .pill{font-size:10px;padding:3px 4px}.panel-title{font-size:15px;padding:12px}.navtabs a{padding:10px 12px;font-size:12px}.bottom-nav a{font-size:10px}.bottom-nav b{font-size:18px}}
+@media(max-width:390px){.top-movers{grid-template-columns:1fr}.team{font-size:15px}.match-meta{font-size:12px}.hero-stat strong{font-size:25px}.hero-stat .arrow{font-size:26px}.history-grid {grid-template-columns: repeat(3, 1fr);}}
 </style>
 </head>
 <body>
+<header class="appbar"><div class="brand">Калькулятор <span>коэффициентов</span></div><div class="app-actions"><a href="#history">◷ История</a></div></header>
 <main>
-  <h1>Correct Score</h1>
-  <p class="sub">Калькулятор движения коэффициентов</p>
-
-  <div class="top-panel">
-    <div class="field">
-      <label>Матч</label>
-      <input id="matchName" placeholder="Например, Venezia — Bologna">
-    </div>
-    <div class="field">
-      <label>Дата</label>
-      <input id="matchDate" type="date">
-    </div>
+<section class="hero-stats"><div class="hero-stat"><div class="arrow">↘</div><div><small>Падение коэффициентов</small><strong id="downShare">—</strong><div class="caption">доля снизившихся значений</div></div></div><div class="hero-stat up"><div class="arrow">↗</div><div><small>Рост коэффициентов</small><strong id="upShare">—</strong><div class="caption">доля выросших значений</div></div></div></section>
+<nav class="navtabs"><a class="active" href="#analysis">▥ Анализ</a><a href="#history">◷ История</a><a href="#statistics">◉ Статистика</a></nav>
+<section id="analysis" class="dashboard-grid">
+<div class="panel"><div class="panel-title">▥ Точные счета и динамика коэффициентов</div><div class="panel-body">
+  <div class="filter-controls">
+    <button class="filter-btn" id="toggleHideZeros">🚫 Скрыть нули</button>
+    <button class="filter-btn" id="toggleSort">⇅ По силе</button>
   </div>
-
-  <div class="tools">
-    <button class="btn primary" id="addUpdate">+ Добавить обновление</button>
-    <button class="btn danger" id="clearAll">Очистить всё</button>
+  <table class="summary-table">
+    <thead><tr><th>Счёт</th><th>Нач. коэф.</th><th>Послед. коэф.</th><th>Изм.</th><th>Шанс</th></tr></thead>
+    <tbody id="summaryRows"><tr><td colspan="5" class="empty">Нажмите «Добавить обновление», чтобы начать</td></tr></tbody>
+  </table>
+</div></div>
+<div><div class="top-movers"><section class="mover"><h3>⬇ Топ падения</h3><div id="downList"><div class="mover-line">Пока нет данных</div></div></section><section class="mover grow"><h3>⬈ Топ роста</h3><div id="upList"><div class="mover-line">Пока нет данных</div></div></section></div></div>
+</section>
+<section id="statistics" class="lower-grid">
+<div class="panel"><div class="panel-title">◉ Распределение результатов</div><div class="donut-area">
+  <div class="donut" id="mainDonut"><b id="donutValue">—</b></div>
+  <div class="legend-list">
+    <span><i style="background:#008cff"></i>Победа хозяев <b id="pctHome" style="margin-left:5px;">0%</b></span>
+    <span><i style="background:#ff9900"></i>Ничья <b id="pctDraw" style="margin-left:5px;">0%</b></span>
+    <span><i style="background:#00e676"></i>Победа гостей <b id="pctAway" style="margin-left:5px;">0%</b></span>
   </div>
+</div></div>
+<div class="panel"><div class="panel-title">💡 Самые вероятные счета</div><div class="insights" id="insights">
+  <div class="insight-title">Нет данных</div><div style="font-size:12px;color:var(--muted)">Введите коэффициенты, чтобы увидеть вероятности.</div>
+</div></div></section>
+<div class="history-head" id="history"><h2>История обновлений</h2><div class="mini">Сохраняется в браузере</div></div>
+<div class="stats"><div class="stat"><small>Обновлений</small><b id="nUpdates">0</b></div><div class="stat"><small>Коэффициентов заполнено</small><b id="nOdds">0</b></div><div class="stat"><small>Самое сильное падение</small><b id="topDown" style="color:var(--red)">—</b></div><div class="stat"><small>Самый сильный рост</small><b id="topUp" style="color:var(--green)">—</b></div></div>
 
-  <div class="summary-box" id="summaryBox">
-    <h3>Изменения за последнее обновление</h3>
-    <div class="summary-grid" id="summaryGrid"></div>
-  </div>
+<div class="tools">
+  <button class="btn primary" id="add" style="flex: 1 1 100%; font-size: 16px; padding: 16px;">＋ Ввести новые коэффициенты</button>
+  <button class="btn gold" id="shareBtn" style="flex: 1 1 100%; font-size: 16px; padding: 16px;">📸 Поделиться результатом</button>
+  
+  <button class="btn" id="csv" style="flex:1;">Скачать CSV</button>
+  <button class="btn" id="sample" style="flex:1;">Загрузить пример</button>
+  <button class="btn danger" id="clear" style="flex:1;">Очистить всё</button>
+</div>
 
-  <div class="table-container" id="tableContainer">
-    <div class="empty-msg">Нажми «Добавить обновление», чтобы начать.</div>
-  </div>
+<div class="panel" id="historyPanel" style="display:none;">
+  <div class="panel-title">◷ Прошлые обновления</div>
+  <div class="panel-body" id="historyBody"></div>
+</div>
 
-  <details>
-    <summary>Импорт (PDF / Ссылка) / Экспорт</summary>
-    <div class="details-content">
-      <div class="tools" style="margin-top:10px;">
-        <button class="btn" id="exportCsv">Скачать CSV</button>
-        <button class="btn" id="loadSample">Загрузить пример</button>
-      </div>
-      
-      <div style="margin-top: 15px; border-top: 1px solid var(--line); padding-top: 15px;">
-        <label style="font-size:12px; color:var(--muted);">Ссылка на NowGoal:</label>
-        <input id="matchUrl" type="url" placeholder="https://..." style="margin: 5px 0;">
-        <div class="tools">
-          <button class="btn" id="importUrl">Импортировать</button>
-          <button class="btn" id="openUrl">Открыть сайт</button>
-        </div>
-        <div class="field" id="pasteWrap" style="display:none; margin-top:10px;">
-          <label>Если не сработало — вставь HTML-код страницы сюда:</label>
-          <textarea id="pasteHtml" rows="3"></textarea>
-          <button class="btn" id="importPaste" style="margin-top:5px;">Разобрать HTML</button>
-        </div>
-        <div class="sub" id="importStatus" style="margin-top:10px;"></div>
-      </div>
-    </div>
-  </details>
 </main>
+<nav class="bottom-nav"><a class="selected" href="#analysis"><b>⌂</b>Главная</a><a href="#statistics"><b>▥</b>Аналитика</a><a href="#history"><b>◷</b>История</a></nav>
+
+<!-- МОДАЛЬНОЕ ОКНО ВВОДА -->
+<div class="modal-overlay" id="updateModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Ввод коэффициентов</h2>
+      <button class="close-btn" id="closeModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="parser-block">
+        <label>📋 БЫСТРЫЙ ВВОД (ВСТАВЬТЕ ТЕКСТ)</label>
+        <textarea id="pasteArea" placeholder="Пример: 1:0 7.5, 2:0 15, 0:0 8.6..."></textarea>
+        <button class="btn primary" id="parseBtn" style="width:100%; padding:10px; font-size:14px; border-radius:8px;">⚡ Распознать и заполнить</button>
+      </div>
+      <div class="inputs-grid" id="modalInputs"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn primary" id="saveUpdateBtn" style="width:100%; padding:16px; font-size:16px; border-radius:12px;">Сохранить обновление</button>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА КАРТИНКИ -->
+<div id="imagePreviewModal">
+  <button class="btn-close-preview" onclick="document.getElementById('imagePreviewModal').style.display='none'">✕</button>
+  <img id="previewImage" src="" alt="Результат">
+  <div class="preview-actions">
+    <button class="btn-share-native" id="shareNativeBtn" style="display:none;">📤 Отправить</button>
+    <button class="btn-download" id="downloadBtn">💾 Скачать</button>
+  </div>
+</div>
+
+<!-- СКРЫТЫЙ ШАБЛОН КАРТОЧКИ -->
+<div id="shareCardContainer">
+  <div class="share-card" id="shareCard">
+    
+    <!-- Иконки (Корона + Мяч) -->
+    <div class="share-icons">
+      <!-- Корона -->
+      <svg width="70" height="70" viewBox="0 0 24 24" fill="#ffd700" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM5 18H19V21H5V18Z" />
+      </svg>
+      <!-- Мяч -->
+      <svg width="65" height="65" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" />
+        <path d="M12 6.5L14.5 11L19.5 12L16 16L12 14.5L8 16L4.5 12L9.5 11L12 6.5Z" />
+      </svg>
+    </div>
+
+    <!-- Название -->
+    <div class="share-title-wrap">
+      <h1 class="share-title-text">Точный счёт</h1>
+    </div>
+    
+    <!-- Плашки -->
+    <div class="share-stats-row">
+      <div class="share-stat-box down">
+        <div class="share-stat-title">ПАДЕНИЕ</div>
+        <div class="share-stat-score" id="shareTop1Score">0:0</div>
+        <div class="share-stat-pct" id="shareTop1Pct">-0.0%</div>
+      </div>
+      <div class="share-stat-box up">
+        <div class="share-stat-title">РОСТ</div>
+        <div class="share-stat-score" id="shareTop2Score">0:0</div>
+        <div class="share-stat-pct" id="shareTop2Pct">+0.0%</div>
+      </div>
+    </div>
+
+    <!-- Кнопка -->
+    <div class="share-bottom-btn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+      Поделиться результатом
+    </div>
+  </div>
+</div>
 
 <script>
-// Группы счетов
-const groups = [
-  { name: '1', scores: ['1:0','2:0','2:1','3:0','3:1','3:2','4:0','4:1','4:2','4:3'] },
-  { name: 'X', scores: ['0:0','1:1','2:2','3:3','4:4','other'] },
-  { name: '2', scores: ['0:1','0:2','1:2','0:3','1:3','2:3','0:4','1:4','2:4','3:4'] }
+const groups=[
+ {name:'1',scores:['1:0','2:0','2:1','3:0','3:1','3:2','4:0','4:1','4:2','4:3']},
+ {name:'X',scores:['0:0','1:1','2:2','3:3','4:4','other']},
+ {name:'2',scores:['0:1','0:2','1:2','0:3','1:3','2:3','0:4','1:4','2:4','3:4']}
 ];
-const allScores = groups.flatMap(g => g.scores);
-let updates = [];
-let idSeq = 1;
+const allScores=groups.flatMap(g=>g.scores);let updates=[];let idSeq=1;const $=s=>document.querySelector(s);
 
-const $ = s => document.querySelector(s);
+let hideZeros = false;
+let sortByChange = false;
 
-// Форматирование
-function val(x) {
-  if (x === undefined || x === null || String(x).trim() === '') return null;
-  let n = Number(String(x).replace(',', '.'));
-  return Number.isFinite(n) && n > 0 ? n : null;
-}
-function fmtPct(n) {
-  if (n === null) return '';
-  return (n > 0 ? '+' : '') + n.toFixed(1) + '%';
-}
-function getStamp() {
-  let d = new Date();
-  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }) + ' ' + 
-         d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+function val(x){if(x===undefined||x===null||String(x).trim()==='')return null;let n=Number(String(x).replace(',','.'));return Number.isFinite(n)&&n>0?n:null}
+function pct(a,b){return a&&b?(b-a)/a*100:null}function fmt(n){return n===null?'—':(n>0?'+':'')+n.toFixed(1)+'%'}
+function stamp(){let d=new Date();return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}
+function addUpdate(time=stamp(),odds={}){updates.push({id:idSeq++,time,odds:{...odds}});render()}
+
+function render(){
+ $('#nUpdates').textContent=updates.length;
+ let filled=updates.reduce((n,u)=>n+allScores.filter(s=>val(u.odds[s])!==null).length,0);$('#nOdds').textContent=filled;
+ let moves=[];updates.forEach((u,i)=>{if(!i)return;allScores.forEach(s=>{let a=val(updates[i-1].odds[s]),b=val(u.odds[s]),p=pct(a,b);if(p!==null)moves.push({s,p})})});
+ let downs=moves.filter(x=>x.p<0).sort((a,b)=>a.p-b.p),ups=moves.filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
+ $('#topDown').textContent=downs.length?downs[0].s+' '+fmt(downs[0].p):'—';$('#topUp').textContent=ups.length?ups[0].s+' '+fmt(ups[0].p):'—';
+ updateDashboard();
+ renderHistory();
 }
 
-// Расчет изменения
-function calcChange(curInput, prevInput, score) {
-  let cur = val(curInput);
-  let prev = prevInput ? val(prevInput[score]) : null;
-  if (cur === null || prev === null) return { cls: '', pct: '' };
-  let p = ((cur - prev) / prev) * 100;
-  if (Math.abs(p) < 0.01) return { cls: 'same', pct: '0%' };
-  return {
-    cls: p < 0 ? 'down' : 'up',
-    pct: fmtPct(p)
-  };
+function updateDashboard(){
+ const rows=$('#summaryRows');const down=$('#downList'),up=$('#upList');
+ const first=updates[0],last=updates[updates.length-1];let items=[];
+ 
+ if(first&&last&&updates.length>0){
+   allScores.forEach(score=>{
+     let a=val(first.odds[score]),b=val(last.odds[score]);
+     if(a!==null&&b!==null) {
+       let p = (b-a)/a*100;
+       if (hideZeros && Math.abs(p) < 0.05) return;
+       items.push({score,a,b,p, prob: (100/b).toFixed(1)});
+     }
+   });
+ }
+ 
+ const downs=items.filter(x=>x.p<0).sort((a,b)=>a.p-b.p),ups=items.filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
+ const total=downs.length+ups.length;
+ $('#downShare').textContent=total?(downs.length/total*100).toFixed(1)+'%':'—';
+ $('#upShare').textContent=total?(ups.length/total*100).toFixed(1)+'%':'—';
+ 
+ let displayItems = [...items];
+ if (sortByChange) displayItems.sort((a,b)=>Math.abs(b.p)-Math.abs(a.p));
+ 
+ rows.innerHTML=displayItems.length?displayItems.slice(0,25).map(x=>`<tr>
+   <td class="score">${x.score}</td>
+   <td>${x.a.toFixed(2)}</td>
+   <td>${x.b.toFixed(2)}</td>
+   <td><span class="pill ${x.p<0?'down':'up'}">${x.p<0?'▼':'▲'} ${x.p>0?'+':''}${x.p.toFixed(1)}%</span></td>
+   <td class="prob-text">${x.prob}%</td>
+ </tr>`).join(''):'<tr><td colspan="5" class="empty">Нет изменений по выбранному фильтру</td></tr>';
+ 
+ const mover=(arr)=>arr.length?arr.slice(0,3).map(x=>`<div class="mover-line"><b>${x.score}</b><span>${x.a.toFixed(1)} → ${x.b.toFixed(1)}</span><b class="${x.p<0?'down':'up'}">${x.p>0?'+':''}${x.p.toFixed(1)}%</b></div>`).join(''):'<div class="mover-line">Пока нет данных</div>';
+ down.innerHTML=mover(downs);up.innerHTML=mover(ups);
+ 
+ if (last && allScores.length > 0) {
+   let probList = [];
+   allScores.forEach(s => {
+     let v = val(last.odds[s]);
+     if (v) probList.push({score: s, prob: 100/v, odds: v});
+   });
+   
+   if (probList.length > 0) {
+     probList.sort((a,b) => b.prob - a.prob);
+     let top3 = probList.slice(0, 3);
+     let html = '<div class="insight-title">На основе последних коэффициентов</div>';
+     top3.forEach((item, idx) => {
+       let width = Math.min(100, item.prob * 2.5);
+       html += `
+         <div class="prob-bar-wrap">
+           <div class="prob-bar-head">
+             <span>${idx+1}. Счёт ${item.score}</span>
+             <span style="color:var(--cyan)">${item.prob.toFixed(1)}% (кэф ${item.odds})</span>
+           </div>
+           <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:${width}%"></div></div>
+         </div>
+       `;
+     });
+     $('#insights').innerHTML = html;
+   } else {
+     $('#insights').innerHTML = '<div class="insight-title">Нет данных</div><div style="font-size:12px;color:var(--muted)">Введите коэффициенты, чтобы увидеть вероятности.</div>';
+   }
+ } else {
+   $('#insights').innerHTML = '<div class="insight-title">Нет данных</div><div style="font-size:12px;color:var(--muted)">Введите коэффициенты, чтобы увидеть вероятности.</div>';
+ }
+ 
+ let prob1=0, probX=0, prob2=0;
+ if(last){
+   groups[0].scores.forEach(s => { let v=val(last.odds[s]); if(v) prob1 += (100/v); });
+   groups[1].scores.forEach(s => { let v=val(last.odds[s]); if(v) probX += (100/v); });
+   groups[2].scores.forEach(s => { let v=val(last.odds[s]); if(v) prob2 += (100/v); });
+ }
+ let totalProb = prob1 + probX + prob2;
+ 
+ if(totalProb > 0){
+   let pct1 = (prob1 / totalProb) * 100, pctX = (probX / totalProb) * 100, pct2 = (prob2 / totalProb) * 100;
+   $('#pctHome').textContent = pct1.toFixed(1) + '%';$('#pctDraw').textContent = pctX.toFixed(1) + '%';$('#pctAway').textContent = pct2.toFixed(1) + '%';
+   $('#mainDonut').style.background = `conic-gradient(#008cff 0% ${pct1}%, #ff9900 ${pct1}% ${pct1+pctX}%, #00e676 ${pct1+pctX}% 100%)`;
+   $('#donutValue').textContent = Math.max(pct1, pctX, pct2).toFixed(1) + '%';
+ } else {
+   $('#pctHome').textContent = '0%';$('#pctDraw').textContent = '0%';$('#pctAway').textContent = '0%';
+   $('#mainDonut').style.background = 'conic-gradient(#333 0% 100%)';$('#donutValue').textContent = '—';
+ }
 }
 
-// Отрисовка
-function render() {
-  const box = $('#tableContainer');
-  const sumBox = $('#summaryBox');
-  const sumGrid = $('#summaryGrid');
+$('#toggleHideZeros').onclick = function() { hideZeros = !hideZeros; this.classList.toggle('active'); updateDashboard(); };
+$('#toggleSort').onclick = function() { sortByChange = !sortByChange; this.classList.toggle('active'); updateDashboard(); };
 
-  if (updates.length === 0) {
-    box.innerHTML = '<div class="empty-msg">Нажми «Добавить обновление», чтобы начать.</div>';
-    sumBox.style.display = 'none';
+function renderHistory() {
+  const panel = $('#historyPanel'); const body = $('#historyBody');
+  if(updates.length === 0) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  let html = '';
+  for(let i = updates.length - 1; i >= 0; i--) {
+    const u = updates[i];
+    let filledScores = allScores.filter(s => val(u.odds[s]) !== null);
+    if (filledScores.length === 0) continue;
+    html += `<div class="history-card">
+      <div class="history-card-header">
+        <span class="history-time">⏱ ${u.time}</span>
+        <button class="history-delete" data-remove="${u.id}" title="Удалить">✕</button>
+      </div>
+      <div class="history-grid">`;
+    filledScores.forEach(s => {
+      html += `<div class="history-pill"><span class="h-score">${s}</span><span class="h-val">${u.odds[s]}</span></div>`;
+    });
+    html += `</div></div>`;
+  }
+  body.innerHTML = html;
+  body.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.onclick = (e) => {
+      let id = +e.target.dataset.remove;
+      if(confirm('Удалить это обновление?')) { updates = updates.filter(x => x.id !== id); save(); render(); }
+    };
+  });
+}
+
+const modal = $('#updateModal'); const modalBody = $('#modalInputs');
+function openInputModal() {
+  const last = updates[updates.length - 1];
+  let html = '';
+  groups.forEach((g, gi) => {
+    html += `<div class="modal-group-title">${gi===0?'Победа хозяев (1)':gi===1?'Ничья (X)':'Победа гостей (2)'}</div>`;
+    g.scores.forEach(score => {
+      let prevVal = last ? (last.odds[score] || '') : '';
+      let prevDisplay = prevVal ? `было: ${prevVal}` : '';
+      html += `<div class="input-card"><label>${score} <span class="prev-val">${prevDisplay}</span></label><input type="number" step="0.01" inputmode="decimal" class="modal-input" data-score="${score}" value="${prevVal}" placeholder="—"></div>`;
+    });
+  });
+  modalBody.innerHTML = html;
+  
+  $('#pasteArea').value = '';
+  modal.style.display = 'flex';
+  
+  setTimeout(() => {
+    const inputs = Array.from(modalBody.querySelectorAll('.modal-input'));
+    const firstEmpty = inputs.find(i => i.value === '');
+    if(firstEmpty) firstEmpty.focus(); else if(inputs.length > 0) inputs[0].focus();
+  }, 150);
+  
+  const inputs = Array.from(modalBody.querySelectorAll('.modal-input'));
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); if (idx < inputs.length - 1) inputs[idx + 1].focus(); else inp.blur(); }
+    });
+    inp.addEventListener('focus', () => inp.select());
+  });
+}
+
+$('#parseBtn').onclick = () => {
+  const text = $('#pasteArea').value;
+  if (!text) { alert('Вставьте текст для распознавания!'); return; }
+
+  const escapedScores = allScores.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  const regex = new RegExp(`(${escapedScores})[^\\d]*(\\d+(?:[.,]\\d+)?)`, 'gi');
+  
+  let match;
+  let foundCount = 0;
+  
+  while ((match = regex.exec(text)) !== null) {
+    const score = match[1];
+    const oddStr = match[2].replace(',', '.');
+    const oddVal = parseFloat(oddStr);
+    
+    if (oddVal > 1 && oddVal < 10000) {
+      const input = document.querySelector(`.modal-input[data-score="${score}"]`);
+      if (input) {
+        input.value = oddStr;
+        foundCount++;
+        input.style.borderColor = 'var(--green)';
+        setTimeout(() => { input.style.borderColor = ''; }, 1500);
+      }
+    }
+  }
+  
+  if (foundCount > 0) {
+    $('#parseBtn').blur();
+  } else {
+    alert('Не удалось распознать счета. Проверьте формат текста.');
+  }
+};
+
+$('#add').onclick = () => { openInputModal(); };
+$('#closeModal').onclick = () => { modal.style.display = 'none'; };
+
+$('#saveUpdateBtn').onclick = () => {
+  let odds = {}; let hasData = false;
+  modalBody.querySelectorAll('.modal-input').forEach(inp => {
+    if(inp.value.trim() !== '') { odds[inp.dataset.score] = inp.value.trim(); hasData = true; }
+  });
+  if(!hasData) { alert('Вы не ввели ни одного коэффициента!'); return; }
+  addUpdate(stamp(), odds); save(); modal.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ====== ЛОГИКА ГЕНЕРАЦИИ И ПРОСМОТРА КАРТИНКИ ======
+let generatedBlob = null;
+
+$('#shareBtn').onclick = function() {
+  if(updates.length < 2) {
+    alert('Введите хотя бы 2 обновления, чтобы увидеть изменения!');
     return;
   }
 
-  // --- Блок сводки изменений (для последнего обновления) ---
-  if (updates.length > 1) {
-    const curr = updates[updates.length - 1];
-    const prev = updates[updates.length - 2];
-    let htmlSum = '';
-    let hasChanges = false;
-
-    allScores.forEach(s => {
-      let ch = calcChange(curr.odds[s], prev.odds, s);
-      if (ch.cls === 'up' || ch.cls === 'down') {
-        hasChanges = true;
-        htmlSum += `<div class="summary-item">
-          <div class="score">${s}</div>
-          <div class="delta-label ${ch.cls}" style="opacity:1;">${ch.pct}</div>
-        </div>`;
-      }
-    });
-
-    if (hasChanges) {
-      sumGrid.innerHTML = htmlSum;
-      sumBox.style.display = 'block';
-    } else {
-      sumBox.style.display = 'none';
+  const first = updates[0], last = updates[updates.length - 1];
+  let items = [];
+  allScores.forEach(score => {
+    let a = val(first.odds[score]), b = val(last.odds[score]);
+    if(a !== null && b !== null) {
+      let p = (b - a) / a * 100;
+      items.push({ score, p });
     }
-  } else {
-    sumBox.style.display = 'none';
-  }
-
-  // --- Таблица ---
-  let html = '<table><thead><tr><th class="time-header">Time</th>';
-  // Заголовки (верхняя группа)
-  groups[0].scores.forEach(s => { html += `<th class="score-col">${s}</th>`; });
-  html += '</tr></thead><tbody>';
-
-  // Идем с конца (новые сверху)
-  for (let i = updates.length - 1; i >= 0; i--) {
-    const u = updates[i];
-    const prevU = i > 0 ? updates[i - 1] : null;
-
-    // Строка с временем и рынком 1
-    html += `<tr><td class="time-cell" rowspan="3">
-      <input class="time-input" data-time="${u.id}" value="${u.time}">
-      <button class="btn danger" data-remove="${u.id}" style="padding:2px 6px; font-size:10px; margin-top:5px;">Удалить</button>
-    </td>`;
-
-    groups.forEach((g, gi) => {
-      if (gi > 0) {
-        // Для рынков X и 2 добавляем новую строку (время уже занято rowspan)
-        html += '<tr>';
-      }
-      
-      g.scores.forEach(s => {
-        let curVal = u.odds[s] ?? '';
-        let ch = calcChange(curVal, prevU ? prevU.odds : null, s);
-        
-        // Если рынок X (там 6 счетов), а таблица рассчитана на 10 (как в 1 и 2), 
-        // добавляем пустые ячейки для выравнивания
-        if (g.scores.length < 10) {
-           // Этот момент пропускаем, так как структура групп задана жестко
-        }
-
-        html += `<td class="odds-cell">
-          <div class="cell-wrap">
-            <input class="odds-input ${ch.cls}" inputmode="decimal" data-odds="${u.id}|${s}" value="${curVal}" placeholder="—">
-            <span class="delta-label ${ch.cls}">${ch.pct || '0'}</span>
-          </div>
-        </td>`;
-      });
-
-      // Добиваем пустыми ячейками, если в группе меньше 10 счетов (для X)
-      if (g.scores.length < 10) {
-        const emptyCells = 10 - g.scores.length;
-        for (let k = 0; k < emptyCells; k++) {
-           html += '<td class="odds-cell" style="background:transparent;"></td>';
-        }
-      }
-
-      html += '</tr>';
-    });
-  }
-  html += '</tbody></table>';
-  box.innerHTML = html;
-}
-
-// Обработчики
-$('#addUpdate').addEventListener('click', () => {
-  const last = updates[updates.length - 1];
-  const newOdds = {};
-  // Автоматически копируем прошлые значения, если есть (удобно)
-  if (last) {
-    allScores.forEach(s => newOdds[s] = last.odds[s] || '');
-  }
-  updates.push({ id: idSeq++, time: getStamp(), odds: newOdds });
-  save();
-  render();
-  // Прокрутка вправо (к первому коэффициенту)
-  setTimeout(() => { $('.table-container').scrollLeft = 100; }, 10);
-});
-
-$('#clearAll').addEventListener('click', () => {
-  if (confirm('Удалить все данные?')) {
-    updates = [];
-    idSeq = 1;
-    save();
-    render();
-  }
-});
-
-// Сохранение и загрузка
-function save() {
-  try {
-    localStorage.setItem('cs_calc_v2', JSON.stringify({ updates, idSeq, matchName: $('#matchName').value, matchDate: $('#matchDate').value }));
-  } catch (e) {}
-}
-function load() {
-  try {
-    let d = JSON.parse(localStorage.getItem('cs_calc_v2'));
-    if (d) {
-      updates = d.updates || [];
-      idSeq = d.idSeq || 1;
-      $('#matchName').value = d.matchName || '';
-      $('#matchDate').value = d.matchDate || '';
-    }
-  } catch (e) {}
-  render();
-}
-
-$('#matchName').addEventListener('input', save);
-$('#matchDate').addEventListener('input', save);
-
-// Делегирование событий для таблицы
-$('#tableContainer').addEventListener('change', (e) => {
-  const t = e.target;
-  if (t.dataset.odds) {
-    let [id, s] = t.dataset.odds.split('|');
-    let u = updates.find(x => x.id === +id);
-    if (u) {
-      u.odds[s] = t.value;
-      save();
-      render(); // Перерисовываем, чтобы обновить проценты
-    }
-  }
-  if (t.dataset.time) {
-    let u = updates.find(x => x.id === +t.dataset.time);
-    if (u) {
-      u.time = t.value;
-      save();
-    }
-  }
-});
-
-$('#tableContainer').addEventListener('click', (e) => {
-  if (e.target.dataset.remove) {
-    updates = updates.filter(x => x.id !== +e.target.dataset.remove);
-    save();
-    render();
-  }
-});
-
-// CSV
-$('#exportCsv').addEventListener('click', () => {
-  let rows = [['Время', ...allScores]];
-  updates.forEach(u => rows.push([u.time, ...allScores.map(s => u.odds[s] ?? '')]));
-  let csv = '\ufeff' + rows.map(r => r.map(x => '"' + String(x).replaceAll('"', '""') + '"').join(';')).join('\n');
-  let a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-  a.download = 'correct_score.csv';
-  a.click();
-});
-
-// Пример
-$('#loadSample').addEventListener('click', () => {
-  updates = [];
-  let samples = [
-    ['01-01 12:00', [11,19,13,50,210,30,45,35,50,100,11,5.9,13,55,210,0,6.9,9.5,7.5,19,14.5,22,45,35,50,100]],
-    ['01-01 14:30', [9.5,20,13,50,190,30,170,100,95,120,9.5,5.8,13,50,190,0,6,9,7.5,20,15,25,55,40,55,100]],
-    ['01-01 17:00', [7.3,15.5,10,45,28,35,140,90,95,140,7.1,5.2,13.5,60,220,0,6.1,11.5,8.4,30,20,28,90,60,70,120]]
-  ];
-  samples.forEach(([time, vals]) => {
-    let o = {};
-    allScores.forEach((s, i) => o[s] = String(vals[i]));
-    updates.push({ id: idSeq++, time, odds: o });
   });
-  save();
-  render();
-});
 
-// Парсинг ссылки
-$('#openUrl').addEventListener('click', () => {
-  let url = $('#matchUrl').value.trim();
-  if (url) window.open(url, '_blank');
-});
+  const downs = items.filter(x => x.p < 0).sort((a, b) => a.p - b.p);
+  const ups = items.filter(x => x.p > 0).sort((a, b) => b.p - a.p);
 
-$('#importUrl').addEventListener('click', async () => {
-  let url = $('#matchUrl').value.trim();
-  if (!url) return;
-  $('#importStatus').textContent = 'Загрузка...';
-  try {
-    let r = await fetch(url);
-    let text = await r.text();
-    parseAndLoadHtml(text);
-  } catch (e) {
-    $('#pasteWrap').style.display = 'block';
-    $('#importStatus').textContent = 'Ошибка доступа (CORS). Скопируй HTML страницы и вставь ниже.';
-  }
-});
+  const topDown = downs[0] || { score: '—', p: 0 };
+  const topUp = ups[0] || { score: '—', p: 0 };
 
-$('#importPaste').addEventListener('click', () => {
-  parseAndLoadHtml($('#pasteHtml').value);
-});
+  // Заполняем новую карточку (без слов "Топ")
+  $('#shareTop1Score').textContent = topDown.score;
+  $('#shareTop1Pct').textContent = topDown.p.toFixed(1) + '%';
 
-function parseAndLoadHtml(html) {
-  let doc = new DOMParser().parseFromString(html, 'text/html');
-  let found = {};
-  doc.querySelectorAll('tr').forEach(tr => {
-    let cells = [...tr.querySelectorAll('td, th')];
-    for (let i = 0; i < cells.length; i++) {
-      let text = cells[i].textContent.trim().replace(/\s+/g, '');
-      if (allScores.includes(text)) {
-        // Ищем первое подходящее число после счета
-        for (let j = i + 1; j < cells.length; j++) {
-          let numStr = cells[j].textContent.trim().replace(',', '.');
-          if (/^\d+(\.\d+)?$/.test(numStr)) {
-            let n = Number(numStr);
-            if (n > 1 && n < 1000) {
-              found[text] = numStr;
-              break;
-            }
+  $('#shareTop2Score').textContent = topUp.score;
+  $('#shareTop2Pct').textContent = (topUp.p > 0 ? '+' : '') + topUp.p.toFixed(1) + '%';
+
+  const btn = this;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '⏳ Генерация...';
+  btn.disabled = true;
+
+  function generateImage() {
+    const card = document.getElementById('shareCard');
+    html2canvas(card, { scale: 2, backgroundColor: null, useCORS: true }).then(canvas => {
+      
+      // Конвертируем в Blob (нужно для отправки)
+      canvas.toBlob(blob => {
+        generatedBlob = blob;
+        
+        // Показываем превью вместо скачивания
+        const imgUrl = URL.createObjectURL(blob);
+        $('#previewImage').src = imgUrl;
+        $('#imagePreviewModal').style.display = 'flex';
+        
+        // Настраиваем нативную кнопку "Поделиться" (если поддерживается)
+        if (navigator.share && navigator.canShare) {
+          const file = new File([blob], 'score.png', { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            $('#shareNativeBtn').style.display = 'block';
+            $('#shareNativeBtn').onclick = () => {
+              navigator.share({
+                title: 'Анализ точного счёта',
+                files: [file]
+              }).catch(console.error);
+            };
           }
         }
-      }
-    }
-  });
-  if (Object.keys(found).length > 0) {
-    updates.push({ id: idSeq++, time: getStamp(), odds: found });
-    save();
-    render();
-    $('#importStatus').textContent = `Импортировано: ${Object.keys(found).length} коэф.`;
-    $('#pasteWrap').style.display = 'none';
-  } else {
-    $('#importStatus').textContent = 'Коэффициенты не найдены в коде.';
-  }
-}
+        
+        // Кнопка скачать
+        $('#downloadBtn').onclick = () => {
+          const link = document.createElement('a');
+          link.download = 'correct-score-analysis.png';
+          link.href = imgUrl;
+          link.click();
+        };
 
-// Запуск
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 'image/png');
+
+    }).catch(err => {
+      console.error(err);
+      alert('Ошибка при создании картинки');
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    });
+  }
+
+  if (window.html2canvas) {
+    generateImage();
+  } else {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = generateImage;
+    script.onerror = () => {
+      alert('Не удалось загрузить библиотеку. Проверьте интернет.');
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    };
+    document.head.appendChild(script);
+  }
+};
+
+function save(){try{localStorage.setItem('nowgoal_correct_score_calc',JSON.stringify({updates,idSeq}))}catch(e){}}
+function load(){try{let d=JSON.parse(localStorage.getItem('nowgoal_correct_score_calc'));if(d){updates=d.updates||[];idSeq=d.idSeq||1}}catch(e){}render()}
+
+$('#clear').onclick=()=>{if(confirm('Удалить все обновления?')){updates=[];render();save()}};
+$('#sample').onclick=()=>{updates=[];let samples=[['09-11 19:30',[11,19,13,50,210,30,45,35,50,100,11,5.9,13,55,210,0,6.9,9.5,7.5,19,14.5,22,45,35,50,100]],['10-11 23:22',[9.5,20,13,50,190,30,170,100,95,120,9.5,5.8,13,50,190,0,6,9,7.5,20,15,25,55,40,55,100]],['27-11 03:10',[7.3,15.5,10,45,28,35,140,90,95,140,7.1,5.2,13.5,60,220,0,6.1,11.5,8.4,30,20,28,90,60,70,120]]];samples.forEach(([time,vals])=>{let o={};allScores.forEach((s,i)=>o[s]=String(vals[i]));updates.push({id:idSeq++,time,odds:o})});render();save()};
+$('#csv').onclick=()=>{let rows=[['Время',...allScores]];updates.forEach(u=>rows.push([u.time,...allScores.map(s=>u.odds[s]??'')]));let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(';')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='correct-score-history.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+
 load();
 </script>
 </body>
